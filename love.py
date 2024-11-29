@@ -12,14 +12,15 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 # Fonction pour générer une citation d'amour unique
 def generate_love_quote():
     prompt = "Génère une citation d'amour inspirante."
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=prompt,
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "user", "content": prompt}
+        ],
         max_tokens=50,
-        temperature=0.9,  # Augmente la créativité
-        n=1  # Générer une seule citation
+        temperature=0.9  # Augmente la créativité
     )
-    return response.choices[0].text.strip()
+    return response.choices[0].message['content'].strip()
 
 # Route principale pour afficher la page web
 @app.route('/')
