@@ -1,12 +1,13 @@
 from flask import Flask, render_template_string
-from transformers import pipeline
 import random
+import openai
+import os
 
 # Initialiser l'application Flask
 app = Flask(__name__)
 
-# Initialiser le pipeline de génération de texte avec un modèle de langue pré-entrainé
-generator = pipeline('text-generation', model='gpt-3.5-turbo')
+# Initialiser l'API OpenAI
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Fonction pour générer une citation d'amour unique
 def generate_love_quote():
@@ -19,8 +20,12 @@ def generate_love_quote():
         "Je t'aime parce que"
     ]
     prompt = random.choice(prompts)
-    generated = generator(prompt, max_length=50, num_return_sequences=1)
-    return generated[0]['generated_text']
+    response = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=prompt,
+        max_tokens=50
+    )
+    return response.choices[0].text.strip()
 
 # Route principale pour afficher la page web
 @app.route('/')
@@ -94,6 +99,5 @@ def home():
 
 # Lancer l'application Flask
 if __name__ == '__main__':
-    import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=True)
