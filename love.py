@@ -11,19 +11,13 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Fonction pour générer une citation d'amour unique
 def generate_love_quote():
-    prompts = [
-        "L'amour est une aventure qui commence par",
-        "Aimer, c'est",
-        "Avec toi, chaque jour est",
-        "L'amour est le plus beau",
-        "Ton sourire me rappelle",
-        "Je t'aime parce que"
-    ]
-    prompt = random.choice(prompts)
+    prompt = "Génère une citation d'amour inspirante."
     response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=prompt,
-        max_tokens=50
+        max_tokens=50,
+        temperature=0.9,  # Augmente la créativité
+        n=1  # Générer une seule citation
     )
     return response.choices[0].text.strip()
 
