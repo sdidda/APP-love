@@ -100,5 +100,4 @@ def home():
 # Lancer l'application Flask
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
-    from werkzeug.serving import run_simple
-    run_simple("0.0.0.0", port, app, use_reloader=True, use_debugger=True)
+    app.run(host="0.0.0.0", port=port, debug=True)
